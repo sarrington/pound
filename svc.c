@@ -390,6 +390,7 @@ check_header(const char *header, char *const content)
         { "Referer",            7,  HEADER_REFERER },
         { "User-agent",         10, HEADER_USER_AGENT },
         { "Destination",        11, HEADER_DESTINATION },
+ 	{ "CF-Connecting-IP",   16, HEADER_CLOUDFLARE },
         { "",                   0,  HEADER_OTHER },
     };
     int i;

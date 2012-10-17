@@ -516,7 +516,7 @@ do_http(thr_arg *arg)
     X509                *x509;
     char                request[MAXBUF], response[MAXBUF], buf[MAXBUF], url[MAXBUF], loc_path[MAXBUF], **headers,
                         headers_ok[MAXHEADERS], v_host[MAXBUF], referer[MAXBUF], u_agent[MAXBUF], u_name[MAXBUF],
-                        caddr[MAXBUF], req_time[LOG_TIME_SIZE], s_res_bytes[LOG_BYTES_SIZE], *mh;
+                        caddr[MAXBUF], req_time[LOG_TIME_SIZE], s_res_bytes[LOG_BYTES_SIZE], *mh, cf_ip[MAXBUF];
     SSL                 *ssl, *be_ssl;
     LONG                cont, res_bytes;
     regmatch_t          matches[4];
@@ -691,6 +691,9 @@ do_http(thr_arg *arg)
                 break;
             case HEADER_USER_AGENT:
                 strcpy(u_agent, buf);
+                break;
+            case HEADER_CLOUDFLARE:
+                strcpy(cf_ip, buf);
                 break;
             case HEADER_CONNECTION:
                 if(!strcasecmp("close", buf))
@@ -1567,6 +1570,13 @@ do_http(thr_arg *arg)
                 caddr, u_name[0]? u_name: "-", req_time, request, response[9], response[10],
                 response[11], s_res_bytes, referer, u_agent, svc->name[0]? svc->name: "-", buf,
                 (end_req - start_req) / 1000000.0);
+            break;
+        case 6:
+            //Same as case 3 except ip is real ip address from cloudflare
+            logmsg(LOG_INFO, "%s %s - %s [%s] \"%s\" %c%c%c %s \"%s\" \"%s\"",
+                v_host[0]? v_host: "-",
+                cf_ip, u_name[0]? u_name: "-", req_time, request, response[9],
+                response[10], response[11], s_res_bytes, referer, u_agent);
             break;
         }
 

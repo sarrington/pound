@@ -440,6 +440,8 @@ typedef enum { RENEG_INIT=0, RENEG_REJECT, RENEG_ALLOW, RENEG_ABORT } RENEG_STAT
 #define HEADER_USER_AGENT           8
 #define HEADER_URI                  9
 #define HEADER_DESTINATION          10
+#define HEADER_CLOUDFLARE           11
+
 
 /* control request stuff */
 typedef enum    {
